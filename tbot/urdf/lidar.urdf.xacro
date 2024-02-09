@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot name="lidar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Lidar sensors -->
+  <xacro:property name="lidar_size" value="0.050" /> <!-- in m -->
+  <xacro:property name="lidar_mass" value="100.160" /> <!-- in kg-->
+
+  <xacro:macro name="lidar" params="sub parent transX transY transZ">
+    <!-- sub: l,r 0,1,2,3 etc -->
+    <!-- parent: parent link name -->
+    <!-- transX transY transZ: xyz position -->
+
+    <link name="lidar_${sub}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${lidar_size} ${lidar_size} ${lidar_size}" />
+        </geometry>
+        <material name="Yellow" />
+      </visual>
+    </link>
+
+    <joint name="lidar_${sub}_joint" type="fixed">
+      <origin xyz="${transX} ${transY} ${transZ}" rpy="0 0 0" />
+      <parent link="${parent}"/>
+      <child link="lidar_${sub}"/>
+    </joint>
+
+    <gazebo reference="lidar_${sub}">
+      <material>Gazebo/Yellow</material>
+      <turnGravityOff>false</turnGravityOff>
+      <sensor type="ray" name="lidar_${sub}_sensor">
+        <pose>${lidar_size/2} 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>640</samples>
+              <resolution>1</resolution>
+              <min_angle>-2.094395</min_angle>
+              <max_angle>2.094395</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>5.0</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller"
+          filename="libgazebo_ros_laser.so">
+          <topicName>/scan</topicName>
+          <frameName>lidar_${sub}</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

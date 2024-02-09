@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot name="wheel2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Wheels -->
+  <xacro:property name="wheel2_radius" value="0.033" /> <!-- in m -->
+  <xacro:property name="wheel2_width"  value="0.018" /> <!-- in m -->
+  <xacro:property name="wheel2_mass"   value="0.100" /> <!-- in kg-->
+
+  <xacro:macro name="wheel2" params="sub parent transX transY transZ">
+    <!-- sub: l,r 0,1,2,3 etc -->
+    <!-- parent: parent link name -->
+    <!-- transX transY transZ: xyz position -->
+
+    <link name="wheel2_${sub}">
+      <visual>
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder length="${wheel2_width}" radius="${wheel2_radius}" />
+        </geometry>
+        <material name="Black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheel2_radius}" length="${wheel2_width}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${wheel2_mass}" />
+        <origin xyz="0 0 0" />
+        <xacro:cylinder_inertia  m="${wheel2_mass}"
+          r="${wheel2_radius}" h="${wheel2_width}" />
+      </inertial>
+    </link>
+
+    <gazebo reference="wheel2_${sub}">
+      <material>Gazebo/Black</material>
+      <turnGravityOff>false</turnGravityOff>
+      <mu1 value="0.0"/>
+      <mu2 value="0.0"/>
+      <kp  value="10000000.0" />
+      <kd  value="1.0" />
+      <fdir1 value="1 0 0"/>
+    </gazebo>
+ 
+    <joint name="wheel2_${sub}_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="wheel2_${sub}"/>
+      <origin xyz="${transX} ${transY} ${transZ}" rpy="0 0 0" /> 
+      <axis xyz="0 1 0"/>
+      <limit effort="100" velocity="100"/>
+      <joint_properties damping="0.0" friction="0.0"/>
+    </joint>
+ 
+ 
+  </xacro:macro>
+</robot>

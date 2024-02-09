@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: tbot
+    relative_path: urdf/tbot.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/tbot.srdf
+  CONFIG:
+    author_name: hayato
+    author_email: kimura.881014@gmail.com
+    generated_timestamp: 1705688743

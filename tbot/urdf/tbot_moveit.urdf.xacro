@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<robot name="tbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find tbot)/urdf/common.urdf.xacro" />
+  <xacro:include filename="$(find tbot)/urdf/wheel.urdf.xacro" />
+  <xacro:include filename="$(find tbot)/urdf/wheel2.urdf.xacro" />
+  <xacro:include filename="$(find tbot)/urdf/caster.urdf.xacro" />
+  <xacro:include filename="$(find tbot)/urdf/lidar.urdf.xacro" />
+    <!-- ur5 -->
+  <xacro:include filename="$(find ur_description)/urdf/my_gripper.urdf.xacro" />
+
+  <!-- <xacro:include filename="$(find tbot)/urdf/ur5.urdf.xacro" /> -->
+  <!-- <xacro:include filename="$(find tbot)/urdf/ur5_robotiq85_gripper.urdf.xacro" /> -->
+
+  <!-- base_footprint Definition -->
+  <link name="base_footprint" />
+
+  <!-- base Definition -->
+  <link name="base_link_t">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <visual>
+      <geometry>
+        <box size="0.069 0.278 0.050"/>
+        <!-- <box size="0.5 0.5 0.5"/> -->
+      </geometry>
+      <material name="White" />
+    </visual>
+    <inertial>
+      <mass value="20" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <xacro:box_inertia m="0.2" x="0.069" y="0.278" z="0.050" />
+    </inertial>
+  </link>
+
+  <gazebo reference="base_link_t">
+    <material>Gazebo/White</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0.045" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child  link="base_link_t" />
+  </joint>
+
+  <!-- body Definition -->
+  <link name="body_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <visual>
+      <geometry>
+        <box size="0.7 0.378 0.30"/>
+      </geometry>
+      <material name="White" />
+    </visual>
+    <inertial>
+      <mass value="1.0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+        <xacro:box_inertia  m="1.0" x="0.7" y="0.378" z="0.30" />
+    </inertial>
+  </link>
+
+  <gazebo reference="body_link">
+    <material>Gazebo/White</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <joint name="body_joint" type="fixed">
+    <origin xyz="0 0 0.17" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child  link="body_link" />
+  </joint>
+
+  <!-- arm -->
+  <xacro:my_arm  prefix=""/>
+
+
+
+  <joint name="robot-arm" type="fixed">
+    <parent link="base_link_t" />
+    <child link="base_link" />
+    <origin xyz="-0.15 0 0.3" rpy="0 0 0" />
+  </joint>
+
+
+
+  <!-- Wheel Definitions -->
+  <xacro:wheel sub="l" parent="base_footprint"
+    transX="0" transY="0.22"  transZ="0.088" />
+  <xacro:wheel sub="r" parent="base_footprint"
+    transX="0" transY="-0.22"  transZ="0.088" />
+  
+  <xacro:caster sub="lf" parent="base_footprint"
+    transX="0.3" transY="-0.2"  transZ="0.020" />
+  <xacro:caster sub="rf" parent="base_footprint"
+    transX="0.3" transY="0.2"  transZ="0.020" />
+  <!-- <xacro:wheel2 sub="lb" parent="base_footprint"
+    transX="-0.3" transY="0.2"  transZ="0.033" />
+  <xacro:wheel2 sub="rb" parent="base_footprint"
+    transX="-0.3" transY="-0.2"  transZ="0.033" /> -->
+  <xacro:caster sub="lb" parent="base_footprint"
+    transX="-0.3" transY="0.2"  transZ="0.020" />
+  <xacro:caster sub="rb" parent="base_footprint"
+    transX="-0.3" transY="-0.2"  transZ="0.020" />
+
+  <!-- Caster Definition -->
+  <!-- <xacro:caster sub="b" parent="base_footprint"
+    transX="-0.20" transY="0" transZ="0.020" />
+  <xacro:caster sub="f" parent="base_footprint"
+    transX="0.20" transY="0" transZ="0.020" /> -->
+
+  <!-- Sensor Definition -->
+  <xacro:lidar sub="0" parent="base_footprint"
+    transX="0.2" transY="0" transZ="0.347" />
+
+
+  <!-- Sensor Definition -->
+  <!-- <xacro:test parent="base_footprint"
+    transX="0" transY="0" transZ="0.5" /> -->
+
+
+</robot>
+
